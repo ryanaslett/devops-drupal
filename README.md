@@ -78,12 +78,15 @@ More usage can be discovered by reading the source of `manifests/init.pp` and
 #### Managing variables and modules
 
     drupal_variable { 'clean_url':
-      ensure => 'present',
+      ensure => present,
       value  => 'TRUE',
     }
 
     drupal_module { 'trigger':
-      ensure => 'present',
+      ensure => present,
+    }
+    drupal_module { 'comment':
+      ensure => absent,
     }
 
 Contact
