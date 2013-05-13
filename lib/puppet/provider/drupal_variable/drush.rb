@@ -6,10 +6,15 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
   def self.instances
     vars = []
     begin
-      # This is SHITTY! But the json exporter is broke
-      drush('variable-get').each do |line|
-        if match = line.match(/^(\w+): (\d+|".+")$/)
-          vars << new(:ensure => :present, :name => match[1], :value => match[2].gsub(/^\"|\"$/, '') )
+      drush('site-alias').reject{|s| s.start_with? '@' }.collect{|s| s.chomp }.each do |site|
+        Puppet.debug "Loading variables for #{site}"
+        # This is SHITTY! But the json exporter is broke
+        drush('variable-get', '-l', site).each do |line|
+          if match = line.match(/^(\w+): (\d+|".+")$/) # These regexes just get rid of complex values.
+            name  = "#{site}::#{match[1]}"
+            value = match[2].gsub(/^\"|\"$/, '')
+            vars << new(:ensure => :present, :name => name, :value => value)
+          end
         end
       end
     rescue Puppet::ExecutionFailure => e
@@ -28,12 +33,16 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
   end
 
   def exists?
+    Puppet.debug "    Site: #{resource[:site]}"
+    Puppet.debug "Variable: #{resource[:variable]}"
+    Puppet.debug "    Name: #{resource[:name]}"
+    Puppet.debug @property_hash.inspect
     @property_hash[:ensure] == :present
   end
 
   def create
     begin
-      drush('variable-set', resource[:name], resource[:value])
+      drush('variable-set', '--exact', '-l', resource[:site], resource[:variable], resource[:value])
       @property_hash[:ensure] = :present
     rescue Puppet::ExecutionFailure => e
       raise Puppet::Error, "Couldn't set #{resource[:name]} to #{resource[:value]} (#{e.message})"
@@ -54,7 +63,8 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
   end
 
   def value=(should)
-    drush('variable-set', resource[:name], should)
+    drush('variable-set', '--exact', '-l', resource[:site], resource[:variable], should)
     @property_hash[:value] = should
   end
+
 end
