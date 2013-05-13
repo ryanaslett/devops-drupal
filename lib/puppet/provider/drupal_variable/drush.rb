@@ -14,6 +14,7 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
             name  = "#{site}::#{match[1]}"
             value = match[2].gsub(/^\"|\"$/, '')
             vars << new(:ensure => :present, :name => name, :value => value)
+            #vars << new(:ensure => :present, :site => site, :name => match[1], :value => value)
           end
         end
       end
@@ -25,6 +26,7 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
 
   def self.prefetch(resources)
     vars = instances
+    Puppet.debug vars.inspect
     resources.keys.each do |name|
       if provider = vars.find{ |v| v.name == name }
         resources[name].provider = provider
@@ -34,7 +36,6 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
 
   def exists?
     Puppet.debug "    Site: #{resource[:site]}"
-    Puppet.debug "Variable: #{resource[:variable]}"
     Puppet.debug "    Name: #{resource[:name]}"
     Puppet.debug @property_hash.inspect
     @property_hash[:ensure] == :present

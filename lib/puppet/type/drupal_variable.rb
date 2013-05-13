@@ -5,37 +5,37 @@ Puppet::Type.newtype(:drupal_variable) do
   desc "Manages a Drupal variable"
   ensurable
 
-#   # I don't think this can work because :site should default to value if not provided.
-#   def self.title_patterns
-#     [
-#       [ /^((\.|\w)+)(::\w+)?$/, [ [ :site ] ] ],
-#       [ /^(\.|\w)+::(\w+)$/,    [ [ :variable ] ] ]
-#     ]
+  def self.title_patterns
+    [
+      [ /^([\.|\w]+)::(\w+)$/, [ [ :site, lambda {|x| x} ], [ :name, lambda {|x| x} ] ] ],
+      [ /^(\w+)$/, [ [ :name, lambda {|x| x} ] ] ]
+    ]
+  end
+
+#   newparam(:name, :namevar => true) do
+#     desc 'Name of the variable'
+#     validate do |value|
+#       unless value =~ /^(\.|\w)+(::\w+)?$/
+#         raise ArgumentError, "Name must not contain whitespace: #{value}"
+#       end
+#     end
+#     munge do |value|
+#       if value.include? '::'
+#         resource[:site], resource[:variable] = value.split('::')
+#       else
+#         resource[:site]     = 'default'
+#         resource[:variable] = value
+#       end
+#       "#{resource[:site]}::#{resource[:variable]}"
+#     end
 #   end
 
-  newparam(:name, :namevar => true) do
-    desc 'Name of the variable'
-    validate do |value|
-      unless value =~ /^(\.|\w)+(::\w+)?$/
-        raise ArgumentError, "Name must not contain whitespace: #{value}"
-      end
-    end
-    munge do |value|
-      if value.include? '::'
-        resource[:site], resource[:variable] = value.split('::')
-      else
-        resource[:site]     = 'default'
-        resource[:variable] = value
-      end
-      "#{resource[:site]}::#{resource[:variable]}"
-    end
-  end
-
-  newparam(:site) do
+  newparam(:site, :namevar => true) do
     desc "Site name. Set by using a name in the format 'site::variable'"
+    defaultto 'default'
   end
 
-  newparam(:variable) do
+  newparam(:name, :namevar => true) do
     desc "Variable name. Set by using a name in the format 'site::variable'"
   end
 
