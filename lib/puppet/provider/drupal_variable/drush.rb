@@ -14,7 +14,6 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
             name  = "#{site}::#{match[1]}"
             value = match[2].gsub(/^\"|\"$/, '')
             vars << new(:ensure => :present, :name => name, :value => value)
-            #vars << new(:ensure => :present, :site => site, :name => match[1], :value => value)
           end
         end
       end
@@ -43,7 +42,7 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
 
   def create
     begin
-      drush('variable-set', '--exact', '-l', resource[:site], resource[:variable], resource[:value])
+      drush('variable-set', '--exact', '-l', resource[:site], resource[:name], resource[:value])
       @property_hash[:ensure] = :present
     rescue Puppet::ExecutionFailure => e
       raise Puppet::Error, "Couldn't set #{resource[:name]} to #{resource[:value]} (#{e.message})"
@@ -64,7 +63,7 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
   end
 
   def value=(should)
-    drush('variable-set', '--exact', '-l', resource[:site], resource[:variable], should)
+    drush('variable-set', '--exact', '-l', resource[:site], resource[:name], should)
     @property_hash[:value] = should
   end
 

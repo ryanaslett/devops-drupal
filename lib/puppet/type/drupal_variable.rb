@@ -31,12 +31,14 @@ Puppet::Type.newtype(:drupal_variable) do
 #   end
 
   newparam(:site, :namevar => true) do
-    desc "Site name. Set by using a name in the format 'site::variable'"
+    desc "Site name. Can be set by using a title in the format 'site::variable'"
+    newvalues /^[\.|\w]+$/
     defaultto 'default'
   end
 
   newparam(:name, :namevar => true) do
-    desc "Variable name. Set by using a name in the format 'site::variable'"
+    desc "Variable name. Can be set by using a title in the format 'site::variable'"
+    newvalues /^[\.|\w]+(::\w+)?$/
   end
 
   newproperty(:value) do
