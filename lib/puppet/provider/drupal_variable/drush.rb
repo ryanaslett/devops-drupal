@@ -59,7 +59,7 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
     #
     # However, if I specify a value, like `puppet resource drupal_variable my.site.com::user_register value=1`
     # I get an empty hash, {}.
-    Puppet.debug "drups: #{@property_hash.inspect}"
+    Puppet.debug "drups: inspect: #{@property_hash.inspect}"
     Puppet.debug "drups: exists?: #{@property_hash[:ensure] == :present}"
     @property_hash[:ensure] == :present
   end
