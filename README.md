@@ -77,10 +77,30 @@ More usage can be discovered by reading the source of `manifests/init.pp` and
 
 #### Managing variables and modules
 
-    drupal_variable { 'clean_url':
-      ensure => present,
-      value  => 'TRUE',
+This allows you to manage the variables for each site by namepacing the title.
+Just like in most programming languages, the scope separator is the double colon.
+
+For example:
+
+    drupal_variable { 'mysite.example.com::clean_url':
+      ensure => 'present',
+      value  => '0',
     }
+
+You can manage the default site variables by leaving the scope blank:
+
+    drupal_variable { 'clean_url':
+      ensure => 'present',
+      value  => '0',
+    }
+
+or by specifying it explicitly:
+
+    drupal_variable { 'default::clean_url':
+      ensure => 'present',
+      value  => '0',
+    }
+
 
     drupal_module { 'trigger':
       ensure => present,
