@@ -1,8 +1,8 @@
 require 'pathname'
 require 'uri'
 
-Puppet::Type.newtype(:drupal_module) do
-  desc "Manages a Drupal module"
+Puppet::Type.newtype(:drupal_theme) do
+  desc "Manages a Drupal theme"
 
   def self.title_patterns
     [
@@ -22,10 +22,6 @@ Puppet::Type.newtype(:drupal_module) do
     newvalue(:disabled) do
       provider.destroy
     end
-
-    newvalue(:uninstalled) do
-      provider.uninstall
-    end
   end
 
   newparam(:site, :namevar => true) do
@@ -35,21 +31,21 @@ Puppet::Type.newtype(:drupal_module) do
   end
 
   newparam(:name, :namevar => true) do
-    desc "Name of the module. Can be set by using a title in the format 'site::module'"
+    desc "Name of the theme. Can be set by using a title in the format 'site::module'"
     newvalues /^[\.|\w]+(::\w+)?$/
   end
 
   newproperty(:label) do
-    desc 'Human readable name of the module'
+    desc 'Human readable name of the theme'
   end
 
   newproperty(:package) do
-    desc 'Package the module belongs to'
+    desc 'Package the theme belongs to'
     newvalues /^\S+$/
   end
 
   newproperty(:version) do
-    desc "The the version of the module"
+    desc "The the version of the theme"
   end
 
 end

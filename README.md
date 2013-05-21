@@ -58,6 +58,28 @@ Usage
       dbdriver       => 'pgsql',
     }
 
+Available options for the `drupal` class. Note that each has a default, defined in `params.pp`.
+
+    class drupal (
+      $admin_password = randstr(),
+      $database       = $drupal::params::database,
+      $dbuser         = $drupal::params::dbuser,
+      $dbpassword     = $drupal::params::dbpassword,
+      $dbhost         = $drupal::params::dbhost,
+      $dbport         = $drupal::params::dbport,
+      $dbdriver       = $drupal::params::dbdriver,
+      $dbprefix       = $drupal::params::dbprefix,
+      $installtype    = $drupal::params::installtype,
+      $update         = $drupal::params::update,
+      $docroot        = $drupal::params::docroot,
+      $writeaccess    = $drupal::params::writeaccess,
+      $packagename    = $drupal::params::packagename,
+      $drupalversion  = $drupal::params::drupalversion,
+      $drushversion   = $drupal::params::drushversion,
+      $managedatabase = $drupal::params::managedatabase,
+      $managevhost    = $drupal::params::managevhost,
+    )
+
 Many configuration options are simply passed directly to `drupal::site`, which is used
 to create and manage the `default` site.
 
@@ -77,14 +99,22 @@ More usage can be discovered by reading the source of `manifests/init.pp` and
 
 #### Managing variables and modules
 
-This allows you to manage the variables for each site by namepacing the title.
-Just like in most programming languages, the scope separator is the double colon.
+This allows you to manage the variables, modules, and themes for each site by namepacing
+the title. Just like in most programming languages, the scope separator is the double colon.
 
 For example:
 
     drupal_variable { 'mysite.example.com::clean_url':
       ensure => 'present',
       value  => '0',
+    }
+
+    drupal_module { 'trigger':
+      ensure => present,
+    }
+
+    drupal_module { 'comment':
+      ensure => absent,
     }
 
 You can manage the default site variables by leaving the scope blank:
@@ -94,6 +124,14 @@ You can manage the default site variables by leaving the scope blank:
       value  => '0',
     }
 
+    drupal_module { 'trigger':
+      ensure => present,
+    }
+
+    drupal_module { 'comment':
+      ensure => absent,
+    }
+
 or by specifying it explicitly:
 
     drupal_variable { 'default::clean_url':
@@ -101,11 +139,11 @@ or by specifying it explicitly:
       value  => '0',
     }
 
-
-    drupal_module { 'trigger':
+    drupal_module { 'default::trigger':
       ensure => present,
     }
-    drupal_module { 'comment':
+
+    drupal_module { 'default::comment':
       ensure => absent,
     }
 

@@ -1,66 +1,22 @@
-
-  # installs apache, php, mysql, etc
-  class { 'requirements':
-    database       => $database,
-    dbuser         => $dbuser,
-    dbpassword     => $dbpassword,
-    dbhost         => $dbhost,
-  } ->
-
   class { 'drupal':
-    database       => $database,
-    dbuser         => $dbuser,
-    dbpassword     => $dbpassword,
-    dbhost         => $dbhost,
-    dbdriver       => $dbdriver,
-    admin_password => $admin_password,
-    repository     => 'git://github.com/user/repo.git',
-  } ->
+    database       => 'drups',
+    dbuser         => 'dbuser',
+    dbpassword     => 'thuperthecret',
+    dbdriver       => 'sqlite',
+  }
 
   drupal::site { 'mysite.example.com':
-    docroot   => '/path/to/docroot',
-    admin     => 'admin',
-    password  => 'password',
-    admintheme => 'sometheme',
-    
+    admin_password => 'derple',
+  }
+  $mysite_mods = prefix([ 'date', 'token', 'pathauto' ], 'mysite.example.com::')
+  drupal_module { $mysite_mods:
+    ensure => present,
   }
 
-  drupal::site { 'dev.mysite.example.com':
-    docroot   => '/path/to/devdocroot',
-    admin     => 'admin',
-    password  => 'password',
-    admintheme => 'sometheme',
-    
+  drupal::site { 'another.example.com':
+    admin_password => 'whoopsie',
   }
-
-  drupal::site { 'dev.mysite.example.com':
-    docroot   => '/path/to/devdocroot',
-    admin     => 'admin',
-    password  => 'password',
-    admintheme => 'sometheme',
-  }
-  
-  drupal::module { 'date':
+  $another_mods = prefix([ 'rules', 'token', 'link' ], 'another.example.com::')
+  drupal_module { $another_mods:
     ensure => present,
-    site   => Drupal::Site['mysite.example.com'],
-    patch  => [ '/path/to/patch', '/path/to/second' ]
   }
-  
-  drupal::module { 'date':
-    ensure => present,
-    site   => Drupal::Site['mysite.example.com'],
-    source  => '/path/to/mod.tar.gz',
-  }
-  
-  drupal::variable { 'somevariable':
-    ensure => present,
-    value  => 'somevalue',
-    site   => Drupal::Site['mysite.example.com'],
-  }
-  
-  
-  
-  
-  
-  git clone --recursive --branch 7.x http://git.drupal.org/project/drupal.git
-git clone --recursive --branch 7.x-5.x http://git.drupal.org/project/drush.git

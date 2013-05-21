@@ -50,5 +50,8 @@ define drupal::db (
         }
       }
     }
+    'sqlite': {
+      # sqlite is built in now, so I guess we've got nothing to do, eh.
+    }
   }
 }
