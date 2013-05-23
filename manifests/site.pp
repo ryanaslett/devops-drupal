@@ -94,7 +94,7 @@ define drupal::site (
     } ->
 
     exec { "install ${name} drupal site":
-      command   => "drush site-install standard --account-pass='${admin_password}' ${name} --yes",
+      command   => "drush site-install standard --account-pass='${admin_password}' -l ${name} --yes",
       path      => '/usr/local/bin:/bin:/usr/bin',
       unless    => "drush core-status -l ${name} | grep 'bootstrap.*Successful'",
       logoutput => true,

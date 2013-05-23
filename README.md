@@ -25,18 +25,20 @@ Limitations
 
 This is still in early development. Pull requests are welcome!
 
+It is recommended that the user manage the Apache (or other webserver) vhosts and
+the Drupal database, but if requested, this module can manage simple setups.
+
 If database management is enabled, the module will create a database and a
-database user for each site. If you attempt to reuse either for multiple sites
-you will get duplicate resource definitions and Puppet will squeal. If you wish
+database user for each site. **If you attempt to reuse either for multiple sites
+you will get duplicate resource definitions and Puppet will squeal**. If you wish
 to reuse users or databases, manage them on your own.
 
-I have not yet decided how I want to manage variables and modules for subsites.
-Currently they're only managed for the `default` site. This is due to the uniqueness
-constraint that resources have on their titles. As soon as I decide on the most
-straightforward way to expose this to the user, this will be enabled.
+Variables, sites, and themes are managed with namespaced titles, like many programming
+languages. The name of the site should be separated from the name of the item being
+managed with the double colon scope operator. Example: `'mysite.example.com::clean_url'`.
 
 This is currently only tested with CentOS using system packages, and with MySQL
-and PgSQL. More testing and implementation is forthcoming.
+and SQLite. More testing and implementation is forthcoming.
 
 
 Usage
@@ -109,11 +111,11 @@ For example:
       value  => '0',
     }
 
-    drupal_module { 'trigger':
+    drupal_module { 'mysite.example.com::trigger':
       ensure => present,
     }
 
-    drupal_module { 'comment':
+    drupal_module { 'mysite.example.com::comment':
       ensure => absent,
     }
 

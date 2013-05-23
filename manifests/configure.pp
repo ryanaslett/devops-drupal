@@ -7,18 +7,6 @@ class drupal::configure {
     }
   }
 
-  # manage the default vhost if requested
-  if $drupal::managevhost {
-    apache::vhost { $::fqdn:
-      ensure     => present,
-      vhost_name => '*',
-      port       => '80',
-      ssl        => false,
-      override   => 'all',
-      docroot    => $drupal::docroot,
-    }
-  }
-
   file { "${docroot}/.htaccess":
     ensure  => file,
     source  => 'puppet:///modules/drupal/htaccess',

@@ -2,8 +2,8 @@
  # **really** wanted this. So against my better judgement, the site
  # type will instantiate a db for you if you ask it to.
  #
- # The major limitation is that you cannot use the same db user for
- # multiple sites.
+ # The major limitation is that you cannot use the same db or user
+ # for multiple sites.
  ##
 define drupal::db (
   $ensure   = present,
