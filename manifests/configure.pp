@@ -10,7 +10,6 @@ class drupal::configure {
   file { "${docroot}/.htaccess":
     ensure  => file,
     source  => 'puppet:///modules/drupal/htaccess',
-    require => Package['drupal7'],
   }
 
   drupal::site { 'default':
