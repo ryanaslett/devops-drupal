@@ -14,6 +14,7 @@ define drupal::site (
   $managedatabase = $drupal::params::managedatabase,
   $managevhost    = $drupal::params::managevhost,
   $base_url       = undef,
+  $cookie_domain  = undef,
 ) {
   # TODO: more validation
   if ! member(['absent', 'present'], $ensure) {
@@ -95,7 +96,7 @@ define drupal::site (
     } ->
 
     exec { "install ${name} drupal site":
-      command   => "drush site-install standard --account-pass='${admin_password}' -l ${name} --yes",
+      command   => "drush site-install standard --account-pass='${admin_password}' -l ${name} --yes --site-name=${name}",
       path      => '/usr/local/bin:/bin:/usr/bin',
       unless    => "drush core-status -l ${name} | grep 'bootstrap.*Successful'",
       logoutput => true,
