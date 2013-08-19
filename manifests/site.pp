@@ -13,6 +13,7 @@ define drupal::site (
   $writeaccess    = $drupal::params::writeaccess,
   $managedatabase = $drupal::params::managedatabase,
   $managevhost    = $drupal::params::managevhost,
+  $base_url       = undef,
 ) {
   # TODO: more validation
   if ! member(['absent', 'present'], $ensure) {
