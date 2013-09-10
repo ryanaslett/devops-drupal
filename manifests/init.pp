@@ -9,6 +9,7 @@ class drupal (
   $dbprefix       = $drupal::params::dbprefix,
   $installtype    = $drupal::params::installtype,
   $update         = $drupal::params::update,
+  $installroot    = $drupal::params::installroot,
   $docroot        = $drupal::params::docroot,
   $writeaccess    = $drupal::params::writeaccess,
   $packagename    = $drupal::params::packagename,
