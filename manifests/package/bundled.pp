@@ -1,8 +1,15 @@
 class drupal::package::bundled (
   $installroot = $drupal::installroot,
-  $docroot = $drupal::docroot,
-  $version = $drupal::drupalversion,
+  $docroot     = $drupal::docroot,
+  $version     = $drupal::drupalversion,
+  $source      = undef,
 ) {
+
+  if $source == undef {
+    $real_source =  "puppet:///modules/drupal/drupal-${version}.tar.gz"
+  } else {
+    $real_source = $source
+  }
 
   $php_modules = $osfamily ? {
     'RedHat' =>  ['gd', 'pdo', 'xml'],
@@ -16,11 +23,13 @@ class drupal::package::bundled (
 
   file { "/tmp/drupal-${version}.tar.gz":
     ensure => file,
-    source => "puppet:///modules/drupal/drupal-${version}.tar.gz",
+    source => $real_source,
     before => Exec['install drupal'],
   }
+
+
   exec { 'install drupal':
-    command => "/bin/tar -xf /tmp/drupal-${version}.tar.gz",
+    command => "/bin/tar --no-same-owner -xf /tmp/drupal-${version}.tar.gz && rm /tmp/drupal-${version}.tar.gz",
     cwd     => $installroot,
     creates => "${installroot}/drupal-${version}",
     before  => File[$docroot],
