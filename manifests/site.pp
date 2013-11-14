@@ -16,6 +16,8 @@ define drupal::site (
   $base_url       = undef,
   $cookie_domain  = undef,
 ) {
+  require drupal::configure
+
   # TODO: more validation
   if ! member(['absent', 'present'], $ensure) {
     fail("drupal::site Ensure value ${ensure} not supported! (absent or present)")
