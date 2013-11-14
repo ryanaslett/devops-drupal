@@ -29,7 +29,7 @@ class drupal::package::bundled (
 
 
   exec { 'install drupal':
-    command => "/bin/tar --no-same-owner -xf /tmp/drupal-${version}.tar.gz && rm /tmp/drupal-${version}.tar.gz",
+    command => "/bin/tar --no-same-owner -xf /tmp/drupal-${version}.tar.gz",
     cwd     => $installroot,
     creates => "${installroot}/drupal-${version}",
     before  => File[$docroot],
