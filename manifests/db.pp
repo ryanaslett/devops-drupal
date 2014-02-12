@@ -17,9 +17,9 @@ define drupal::db (
     'mysql': {
       # just make sure these are installed
       include mysql::server
-      include mysql::php
+      include mysql::bindings::php
 
-      mysql::db { $database:
+      mysql::db { $name:
         ensure   => $ensure,
         user     => $user,
         password => $password,
@@ -42,7 +42,7 @@ define drupal::db (
         if is_array($grant) {
           $real_grant = $grant[0]
         }
-        postgresql::db { $database:
+        postgresql::db { $name:
 #         ensure   => $ensure,
           user     => $user,
           password => $password,

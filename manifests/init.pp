@@ -34,6 +34,8 @@ class drupal (
   -> class { 'drupal::configure': }
   -> anchor { 'drupal::end': }
 
+  include drupal::defaultsite
+
   # TODO: figure out how drush handles multisite for update. Perhaps this should go in the site define
   if $update {
     exec { 'update drupal core and all plugins':
