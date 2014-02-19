@@ -17,8 +17,9 @@ define drupal::db (
     'mysql': {
       # just make sure these are installed
       include mysql::server
-      include mysql::bindings::php
-
+      class { 'mysql::bindings':
+        php_enable => true,
+      }
       mysql::db { $name:
         ensure   => $ensure,
         user     => $user,
