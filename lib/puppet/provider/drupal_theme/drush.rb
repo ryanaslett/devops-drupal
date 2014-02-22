@@ -6,9 +6,9 @@ Puppet::Type.type(:drupal_theme).provide(:drush) do
   def self.instances
     mods = []
     begin
-      drush('site-alias').reject{|s| s.start_with? '@' }.collect{|s| s.chomp }.each do |site|
+      drush('site-alias').split("\n").reject{|s| s.start_with? '@' }.collect{|s| s.chomp }.each do |site|
         Puppet.debug "Loading themes for #{site}"
-        drush('pm-list', '-l', site).each do |line|
+        drush('pm-list', '-l', site).split("\n").each do |line|
           if match = line.match(/(\S+) +(.+) +\((.+)\) +Theme +(Enabled|Disabled|Not installed) +(\S+)/)
             mods << new(:ensure  => match[4].downcase.to_sym,
                         :package => match[1],

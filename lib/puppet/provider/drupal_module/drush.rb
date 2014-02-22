@@ -6,9 +6,9 @@ Puppet::Type.type(:drupal_module).provide(:drush) do
   def self.instances
     mods = []
     begin
-      drush('site-alias').reject{|s| s.start_with? '@' }.collect{|s| s.chomp }.each do |site|
+      drush('site-alias').split("\n").reject{|s| s.start_with? '@' }.collect{|s| s.chomp }.each do |site|
         Puppet.debug "Loading modules for #{site}"
-        drush('pm-list', '-l', site).each do |line|
+        drush('pm-list', '-l', site).split("\n").each do |line|
           if match = line.match(/(\S+) +(.+) +\((.+)\) +Module +(Enabled|Disabled|Not installed) +(\S+)/)
             mods << new(:ensure  => statussymbol(match[4]),
                         :package => match[1],

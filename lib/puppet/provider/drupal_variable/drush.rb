@@ -6,10 +6,10 @@ Puppet::Type.type(:drupal_variable).provide(:drush) do
   def self.instances
     vars = []
     begin
-      drush('site-alias').reject{|s| s.start_with? '@' }.collect{|s| s.chomp }.each do |site|
+      drush('site-alias').split("\n").reject{|s| s.start_with? '@' }.collect{|s| s.chomp }.each do |site|
         Puppet.debug "Loading variables for #{site}"
         # This is SHITTY! But the json exporter is broke
-        drush('variable-get', '-l', site).each do |line|
+        drush('variable-get', '-l', site).split("\n").each do |line|
           if match = line.match(/^(\w+): (\d+|".+")$/) # These regexes just get rid of complex values.
             name  = "#{site}::#{match[1]}"
             value = match[2].gsub(/^\"|\"$/, '')
