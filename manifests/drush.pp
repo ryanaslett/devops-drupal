@@ -9,7 +9,7 @@ class drupal::drush (
 
   if versioncmp($version, '5.9.9') > 0 {
     $download_url =  "https://github.com/drush-ops/drush/archive/${version}.tar.gz"
-    $unpackdir = "drush-$version"
+    $unpackdir = "drush-${version}"
   } else {
     $download_url = "http://ftp.drupal.org/files/projects/drush-${version}.tar.gz"
     $unpackdir = 'drush'
@@ -28,7 +28,7 @@ class drupal::drush (
     }
     exec { 'install drush':
       command => "/bin/tar -xf /tmp/drush-${version}.tar.gz -C ${installdir}",
-      creates => "${isntalldir}/${unpackdir}",
+      creates => "${installdir}/${unpackdir}",
     }
   }
 
