@@ -1,4 +1,4 @@
-name 'binford2k-drupal'
+name 'drupal'
 version '0.0.4'
 license 'Apache 2.0'
 dependency 'puppetlabs/apache'

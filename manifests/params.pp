@@ -23,10 +23,10 @@ class drupal::params {
   }
 
   # The version of Drupal to install. Only used with remote installtype.
-  $drupalversion   = '7.x'
+  $drupalversion   = '7.28'
 
   # The version of drush to install. Currently, no native packages exist.
-  $drushversion    = '7.x-5.8'
+  $drushversion    = '6.x'
 
   # Update drupal core, modules, themes, and perform all pending updates on each agent run.
   $update          = false
@@ -35,7 +35,7 @@ class drupal::params {
   $writeaccess     = false
 
   # default to installing the package from the repos
-  $installtype     = 'package'
+  $installtype     = 'remote'
 
   # default to requiring the user to manage the database and the vhost
   $managedatabase  = false
